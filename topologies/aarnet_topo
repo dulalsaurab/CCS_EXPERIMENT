@@ -1,0 +1,46 @@
+[nodes]
+Sydney1
+Brisbane2
+Canberra1
+Sydney2
+Townsville
+Cairns
+Brisbane1
+Rock
+Armidale
+Hobart
+Canberra2
+Perth1
+Perth2
+Adelaide1
+Adelaide2
+Melbourne1
+Melbourne2
+Alice
+Darwin
+
+[links]
+Sydney1_node:Canberra2_node delay=1.25523395791ms
+Sydney1_node:Sydney2_node delay=0.0ms
+Sydney1_node:Brisbane1_node delay=3.72289839741ms
+Brisbane2_node:Sydney2_node delay=3.72289839741ms
+Brisbane2_node:Brisbane1_node delay=0.0ms
+Canberra1_node:Canberra2_node delay=0.0ms
+Canberra1_node:Melbourne1_node delay=2.37001974308ms
+Sydney2_node:Armidale_node delay=1.90545143158ms
+Sydney2_node:Melbourne2_node delay=3.62519848523ms
+Townsville_node:Cairns_node delay=1.43055639475ms
+Townsville_node:Rock_node delay=3.04077055457ms
+Brisbane1_node:Rock_node delay=2.64399512446ms
+Hobart_node:Melbourne2_node delay=3.03791254022ms
+Hobart_node:Melbourne1_node delay=3.03791254022ms
+Perth1_node:Perth2_node delay='0.0ms')
+Perth1_node:Adelaide1_node delay=10.8448717354ms
+Perth2_node:Adelaide2_node delay=10.8448717354ms
+Adelaide1_node:Darwin_node delay=13.3053685474ms
+Adelaide1_node:Adelaide2_node delay=0.0ms
+Adelaide1_node:Melbourne1_node delay=3.32024881368ms
+Adelaide2_node:Melbourne2_node delay=3.32024881368ms
+Adelaide2_node:Alice_node delay=6.7571357102ms
+Melbourne1_node:Melbourne2_node delay=0.0ms
+Alice_node:Darwin_node delay=6.55670834676ms
