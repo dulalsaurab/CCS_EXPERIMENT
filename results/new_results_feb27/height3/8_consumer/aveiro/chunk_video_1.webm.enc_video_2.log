@@ -1,0 +1,12 @@
+
+
+All segments have been received.
+Time elapsed: 1.48626 seconds
+Segments received: 5757
+Transferred size: 46048.7 kB
+Goodput: 247.863725 Mbit/s
+Congestion marks: 0 (caused 0 window decreases)
+Timeouts: 820 (caused 4 window decreases)
+Retransmitted segments: 820 (12.4677%), skipped: 0
+RTT min/avg/max = 0.435/49.958/231.758 ms
+ERROR: error while receiving data from socket (End of file)
