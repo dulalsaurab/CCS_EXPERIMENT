@@ -24,10 +24,12 @@ do
 
         echo $height $consumer $res_time $res_goodput $res_rtt_min $res_rrt_avg $res_rrt_max >> result_height
 
-        log_file_vid=$result_folder$height/$consumer/*/chunk_video_1.webm.enc_video_*.log
+        log_file_vid=$result_folder$height/$consumer/*/chunk_video_1.webm.enc_video_*
         
         res_time=$(cat $log_file_vid | grep "Time el" | awk '{ sum += $3 } END { if (NR > 0) print sum / NR }')
-        res_goodput=$(cat $log_file_vid | grep "Good" | awk '{ if ($3 ~ /Mbit/) {a=$2*1024} else {a=$2}; sum += a} END { if (NR > 0) print sum / NR}')
+        
+        res_goodput=$(cat $log_file_vid | grep "Good" | awk '{ if ($3 ~ /Kbit/) {a=$2/1024} else {a=$2}; sum+=a} END { if (NR > 0) print sum / NR}')
+        # res_goodput1=$(cat $log_file_vid | grep "Good" | awk '{ sum += $2 } END { if (NR > 0) print sum / NR}')
         res_rtt_min=$(cat $log_file_vid | grep RTT | awk '{split($4,a,"/"); sum+=a[1];} END {if (NR > 0) print sum / NR}')
         res_rrt_avg=$(cat $log_file_vid | grep RTT | awk '{split($4,a,"/"); sum+=a[2];} END {if (NR > 0) print sum / NR}')
         res_rrt_max=$(cat $log_file_vid | grep RTT | awk '{split($4,a,"/"); sum+=a[3];} END {if (NR > 0) print sum / NR}')
