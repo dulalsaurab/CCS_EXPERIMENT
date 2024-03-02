@@ -6,8 +6,8 @@ declare -a res_time
 # declare -A Timeout
 
 touch result_height result_vid
-echo "hgt con tt gp minrtt avgrtt maxrtt" > result_height
-echo "hgt con tt gp minrtt avgrtt maxrtt" > result_vid
+echo "hgt con tt(sec) gp(Mbit/s) minrtt(ms) avgrtt(ms) maxrtt(ms)" > result_height
+echo "hgt con tt(sec) gp(Mbit/s) minrtt(ms) avgrtt(ms) maxrtt(ms)" > result_vid
 
 for hnum in 3 5 7 9;
 do

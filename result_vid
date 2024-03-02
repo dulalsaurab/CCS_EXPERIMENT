@@ -1,4 +1,4 @@
-hgt con tt gp minrtt avgrtt maxrtt
+hgt con tt(sec) gp(Mbit/s) minrtt(ms) avgrtt(ms) maxrtt(ms)
 height3 10_consumer 8.73169 117.84 34.9773 117.834 231.384
 height3 12_consumer 9.42129 94.9689 26.6416 132.241 250.69
 height3 14_consumer 7.96001 100.128 42.3201 149.621 338.447
