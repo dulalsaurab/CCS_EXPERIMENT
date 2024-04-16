@@ -16,7 +16,7 @@ from minindn.apps.nlsr import Nlsr
 
 def start(ndn):
     ndn.start()
-    AppManager(ndn, ndn.net.hosts, Nfd, logLevel='DEBUG')
+    AppManager(ndn, ndn.net.hosts, Nfd, logLevel='INFO')
     AppManager(ndn, ndn.net.hosts, Nlsr, logLevel='INFO')
     print ("Waiting for NLSR Convergence")
     sleep(300)
@@ -28,8 +28,8 @@ def sendFile(node, prefix, path, file, identifier): #filename = filename+filedir
     node.cmd(cmd)
     sleep(3)
 
-def receiveFile(node, prefix, file, identifier):
-    cmd = 'ndncatchunks {} > video.{} 2> chunk_{}_{}.log &'.format(prefix, identifier, file, identifier)
+def receiveFile(node, prefix, file, identifier, con_identity):
+    cmd = 'ndncatchunks {} > video.{} 2> chunk_{}_{}_{}.log &'.format(prefix, identifier, file, identifier, con_identity)
     node.cmd(cmd)
 
 def configureProducers(producers):
@@ -38,7 +38,7 @@ def configureProducers(producers):
         for prefix in producers[producer]['prefix']:
             print( "Prefix Name: ", prefix, "Host Name: ", host.name)
             host.cmd('nlsrc advertise {}'.format(prefix))
-            sleep(2)
+            sleep(10)
 
 def sendReceiveHandler(ndn, host, prefix, path, files, type, sleeptime, consumers):
     # publish file or files
@@ -51,27 +51,43 @@ def sendReceiveHandler(ndn, host, prefix, path, files, type, sleeptime, consumer
             receiveFile(ndn.net[consumer], prefix, file, type)
 
 if __name__ == '__main__':
+    # sleep(20)
     setLogLevel('info')
     Popen(['rm','-r', '/tmp/minindn/'], stdout=PIPE, stderr=PIPE).communicate()
     prod = 'urjc'
     # prod = 'a'
 
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--file",  dest = "filename", help="input encrypted video file")
+    parser.add_argument("-a", "--height",  dest = "height_file", help="input height file")
+    parser.add_argument("-n", "--consumerC",  dest = "consumer_c", help="number of consumer")
+    ndn = Minindn(parser=parser)
+    args = ndn.args
+
     # -------- topo section --------------------
     producers = [prod]
-    consumers = ["univh2c", "minho", "msu", "aveiro", "basel"]
+    # consumers = ["univh2c", "minho", "msu", "aveiro", "basel"]
     # consumers = ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs"]
     # consumers = ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs", "padua","cnic","lip6", "anyang", "ufba"]
     # consumers = ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs", "padua","cnic","lip6", "anyang", "ufba", "mumbai_aws", "gist", "lacl", "michigan", "afa"]
     # consumer count 5, 10, 15, 20
-    # --------- end ----------------------------
+    # consumerDict = {'2': ["univh2c", "minho"],
+    #                 '4': ["univh2c", "minho", "msu", "aveiro"],
+    #                 '6': ["univh2c", "minho", "msu", "aveiro", "basel", "wu"],
+    #                 '8': ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp"],
+    #                 '10': ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs"],
+    #                 '12': ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs", "padua","cnic"],
+    #                 '14': ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs", "padua","cnic","lip6", "anyang"]}
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-f", "--file",  dest = "filename", help="input encrypted video file")
-    parser.add_argument("-a", "--height",  dest = "height_file", help="input height file")
+    consumerDict = {'5': ["univh2c", "minho", "msu", "aveiro", "basel"],
+                    '10': ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs"],
+                    '15': ["univh2c", "minho", "msu", "aveiro", "basel", "wu", "neu", "uaslp", "uiuc", "copelabs", "padua","cnic","lip6", "anyang", "ufba"]}
+    # consumers = consumerDict[args.consumer_c]
+    
+    consumers = consumerDict['5']
 
-    ndn = Minindn(parser=parser)
-    args = ndn.args
     consumers = [x.name for x in ndn.net.hosts if x.name in consumers]
+    # --------- end ----------------------------
 
     absFilePath = str(Path(args.filename).resolve())
     heightFilePath = str(Path(args.height_file).resolve())
@@ -100,10 +116,12 @@ if __name__ == '__main__':
     sleep(10)
 
     for consumer in consumers:
-        receiveFile(ndn.net[consumer], producers[prod]['prefix'][0], files[0], 'video')
-        receiveFile(ndn.net[consumer], producers[prod]['prefix'][1], files[1], 'height')
+        # 5 per consumer
+        con_count = int(args.consumer_c)
+        for x_con in range (0, con_count):
+            receiveFile(ndn.net[consumer], producers[prod]['prefix'][0], files[0], 'video', x_con)
+            receiveFile(ndn.net[consumer], producers[prod]['prefix'][1], files[1], 'height', x_con)
 
-    # sleep(100)
-    MiniNDNCLI(ndn.net)
-
+    sleep(200)
+    # MiniNDNCLI(ndn.net)
     ndn.stop()
