@@ -1,0 +1,11 @@
+
+
+All segments have been received.
+Time elapsed: 0.96303 seconds
+Segments received: 5758
+Transferred size: 46057.3 kB
+Goodput: 382.603073 Mbit/s
+Congestion marks: 4 (caused 3 window decreases)
+Timeouts: 387 (caused 2 window decreases)
+Retransmitted segments: 387 (6.2978%), skipped: 0
+RTT min/avg/max = 0.831/40.304/124.415 ms
